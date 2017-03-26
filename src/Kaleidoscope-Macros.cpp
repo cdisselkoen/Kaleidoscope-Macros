@@ -1,4 +1,5 @@
 #include "Kaleidoscope-Macros.h"
+#include "Kaleidoscope-EEPROM-Settings.h"
 
 __attribute__((weak))
 const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
@@ -6,6 +7,8 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 }
 
 byte Macros_::row, Macros_::col;
+uint8_t Macros_::macroSize;
+uint16_t Macros_::macroBase;
 
 void Macros_::play(Macros_::lookup_t lookup, uint16_t position) {
     macro_t macro = END;
@@ -72,6 +75,23 @@ Macros_::Macros_ (void) {
 void
 Macros_::begin (void) {
     event_handler_hook_use (handleMacroEvent);
+}
+
+void
+Macros_::useEEPROM (uint8_t macroSize_, uint8_t maxMacros) {
+    macroSize = macroSize_;
+    macroBase = EEPROMSettings.requestSlice (macroSize * maxMacros);
+}
+
+uint8_t
+Macros_::lookupEEPROM (uint16_t address) {
+    return EEPROM[address];
+}
+
+void Macros_::playEEPROM (uint8_t eepromIndex) {
+    Serial.println ("playEEPROM");
+    Serial.println (macroBase);
+    play (lookupEEPROM, macroBase + (eepromIndex * macroSize));
 }
 
 Macros_ Macros;
