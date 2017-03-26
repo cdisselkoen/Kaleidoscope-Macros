@@ -13,13 +13,13 @@ class Macros_ : public KaleidoscopePlugin {
 
     virtual void begin(void) final;
 
-    void play(const macro_t *macro_p);
+    static void play(const macro_t *macro_p);
 
     static byte row, col;
 
  private:
     typedef uint8_t (*lookup_t)(uint16_t position);
-    void play(lookup_t lookup, uint16_t position);
+    static void play(lookup_t lookup, uint16_t position);
 
     static uint8_t lookupPROGMEM(uint16_t address);
 };
