@@ -7,33 +7,33 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 
 byte Macros_::row, Macros_::col;
 
-void Macros_::play(const macro_t *macro_p) {
+void Macros_::play(Macros_::lookup_t lookup, uint16_t position) {
     macro_t macro = END;
     uint8_t interval = 0;
     Key key;
 
-    if (!macro_p)
+    if (!position)
         return;
 
     while (true) {
-        switch (macro = pgm_read_byte(macro_p++)) {
+        switch (macro = lookup(position++)) {
         case MACRO_ACTION_STEP_INTERVAL:
-            interval = pgm_read_byte(macro_p++);
+            interval = lookup(position++);
             break;
         case MACRO_ACTION_STEP_WAIT: {
-            uint8_t wait = pgm_read_byte(macro_p++);
+            uint8_t wait = lookup(position++);
             delay(wait);
             break;
         }
         case MACRO_ACTION_STEP_KEYDOWN:
-            key.flags = pgm_read_byte(macro_p++);
-            key.keyCode = pgm_read_byte(macro_p++);
+            key.flags = lookup(position++);
+            key.keyCode = lookup(position++);
             handle_key_event(key, 255, 255, IS_PRESSED | INJECTED);
             Keyboard.sendReport();
             break;
         case MACRO_ACTION_STEP_KEYUP:
-            key.flags = pgm_read_byte(macro_p++);
-            key.keyCode = pgm_read_byte(macro_p++);
+            key.flags = lookup(position++);
+            key.keyCode = lookup(position++);
             handle_key_event(key, 255, 255, WAS_PRESSED | INJECTED);
             Keyboard.sendReport();
             break;
@@ -44,6 +44,14 @@ void Macros_::play(const macro_t *macro_p) {
 
         delay(interval);
     }
+}
+
+void Macros_::play(const macro_t *macro_p) {
+    play (lookupPROGMEM, (uint16_t)macro_p);
+}
+
+uint8_t Macros_::lookupPROGMEM(uint16_t address) {
+    return pgm_read_byte (address);
 }
 
 static Key handleMacroEvent(Key mappedKey, byte row, byte col, uint8_t keyState) {
