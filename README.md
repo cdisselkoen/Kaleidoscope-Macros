@@ -52,7 +52,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
                      END);
   case MACRO_HELLO:
     if (key_toggled_on(keyState)) {
-      return Macros.type(PSTR("Hello world!"));
+      return Macros.type(PSTR("Hello "), PSTR("world!"));
     }
     break;
   case MACRO_SPECIAL:
@@ -93,18 +93,19 @@ The plugin provides a `Macros` object, with the following methods and properties
 >
 > The `macro` argument must be a sequence created with the `MACRO()` helper!
 
-### `.type(string)`
+### `.type(strings...)`
 
-> In cases where we only want to type a string, it is far more convenient to use
-> this method: we do not have to use the `MACRO()` helper, but just give this
-> one a string, and it will type it for us on the keyboard.
+> In cases where we only want to type some strings, it is far more convenient to
+> use this method: we do not have to use the `MACRO()` helper, but just give
+> this one a set of strings, and it will type them for us on the keyboard. We
+> can use as many strings as we want, and all of them will be typed in order.
 >
-> The string is limited to a sequence of printable ASCII characters. No
+> Each string is limited to a sequence of printable ASCII characters. No
 > international symbols, or unicode, or anything like it: just plain ASCII.
 >
-> The `string` argument must also reside in program memory, and the easiest way
-> to do that is to wrap the string in a `PSTR()` helper. See the program code at
-> the beginning of this documentation for an example!
+> Each of `strings` arguments must also reside in program memory, and the
+> easiest way to do that is to wrap the string in a `PSTR()` helper. See the
+> program code at the beginning of this documentation for an example!
 
 ### `.row`, `.col`
 

@@ -25,7 +25,7 @@ class Macros_ : public KaleidoscopePlugin {
   }
   const macro_t *type(const char *string);
   template <typename... Strings>
-  const macro_t *type(const char *first, Strings&&... strings) {
+    const macro_t *type(const char *first, Strings&&... strings) {
     type(first);
     return type(strings...);
   }
