@@ -52,7 +52,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
                      END);
   case MACRO_HELLO:
     if (key_toggled_on(keyState)) {
-      Macros.type(PSTR("Hello world!"));
+      return Macros.type(PSTR("Hello world!"));
     }
     break;
   case MACRO_SPECIAL:
@@ -66,7 +66,7 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 
 void setup() {
   Kaleidoscope.use(&Macros);
-  
+
   Kaleidoscope.setup ();
 }
 ```

@@ -114,7 +114,7 @@ static const Key ascii_to_key_map[] PROGMEM = {
   LSHIFT(Key_Backtick),
 };
 
-void Macros_::type(const char *string) {
+const macro_t *Macros_::type(const char *string) {
   while (true) {
     uint8_t ascii_code = pgm_read_byte(string++);
     if (!ascii_code)
@@ -167,6 +167,8 @@ void Macros_::type(const char *string) {
     handle_keyswitch_event(key, UNKNOWN_KEYSWITCH_LOCATION, WAS_PRESSED | INJECTED);
     Keyboard.sendReport();
   }
+
+  return MACRO_NONE;
 }
 
 static Key handleMacroEvent(Key mappedKey, byte row, byte col, uint8_t keyState) {
